@@ -29,7 +29,7 @@ const App = () => {
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between">
           <div className="flex items-center flex-shrink-0 mr-6">
             <span className="font-semibold text-xl tracking-tight cursor-pointer" onClick={() => setCurrentPage('home')}>
-              EvaluTrig
+              PAMATEDU
             </span>
           </div>
           
@@ -102,10 +102,10 @@ const App = () => {
       <div className="max-w-7xl mx-auto p-6">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            Sistema de Evaluación Adaptativa de Trigonometría
+            Evaluación Adaptativa
           </h1>
           <p className="text-xl text-gray-600">
-            Una experiencia de evaluación personalizada utilizando Teoría de Respuesta al Ítem
+            Una experiencia de evaluación personalizada
           </p>
         </div>
         
@@ -116,10 +116,6 @@ const App = () => {
               La evaluación adaptativa es un enfoque que personaliza las preguntas según el nivel de habilidad del estudiante.
               A diferencia de los exámenes tradicionales, este sistema selecciona inteligentemente las preguntas más 
               adecuadas para cada estudiante, proporcionando una medición más precisa del conocimiento.
-            </p>
-            <p className="text-gray-600">
-              Nuestro sistema utiliza el modelo IRT (Teoría de Respuesta al Ítem) de 3 parámetros para evaluar
-              con precisión el nivel de habilidad de cada estudiante en trigonometría.
             </p>
           </div>
           
@@ -137,12 +133,6 @@ const App = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                 </svg>
                 Algoritmo adaptativo que ajusta la dificultad en tiempo real
-              </li>
-              <li className="flex items-start">
-                <svg className="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                </svg>
-                Soporte para notación matemática LaTeX
               </li>
               <li className="flex items-start">
                 <svg className="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -203,7 +193,7 @@ const App = () => {
             onClick={() => setCurrentPage('evaluation')}
             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-colors text-lg"
           >
-            Comenzar Evaluación
+            Comenzar
           </button>
         </div>
       </div>
@@ -266,16 +256,18 @@ const App = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between">
             <div className="mb-6 md:mb-0">
-              <h2 className="text-xl font-bold mb-2">EvaluTrig</h2>
+              <h2 className="text-xl font-bold mb-2">PAMATEDU</h2>
               <p className="text-gray-400">Sistema de Evaluación Adaptativa de Trigonometría</p>
             </div>
             <div>
               <h3 className="text-lg font-medium mb-2">Contacto</h3>
-              <p className="text-gray-400">soporte@evalutrig.edu</p>
+              <p className="text-gray-400">daniielnegrethe24@gmail.com</p>
+              <p className="text-gray-400">fer@gmail.com</p>
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
-            <p>&copy; {new Date().getFullYear()} EvaluTrig. Todos los derechos reservados.</p>
+            <p>&copy; {new Date().getFullYear()} PAMATEDU. Todos los derechos reservados.</p>
+            <p> Plataforma realizada para fines educativos.</p>
           </div>
         </div>
       </footer>

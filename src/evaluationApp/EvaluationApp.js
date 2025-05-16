@@ -1,3 +1,5 @@
+// Limpieza del código y corrección del archivo
+
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import 'katex/dist/katex.min.css';
@@ -36,7 +38,7 @@ const convertToScaleOf28 = (rawAbility, navigationData) => {
 const updateConfidence = (currentConfidence, isCorrect) => {
   // Parámetros del modelo
   const pGuess = 0.25;        // Probabilidad de acertar por azar (4 opciones)
-  const pMastery = 0.85;      // Probabilidad de acertar si domina el tema
+  const pMastery = 0.90;      // Probabilidad de acertar si domina el tema
   
   let newConfidence;
   
@@ -52,6 +54,31 @@ const updateConfidence = (currentConfidence, isCorrect) => {
   
   // Limitar a rango 0-1
   return Math.max(0, Math.min(1, newConfidence));
+};
+
+// Componente para renderizar LaTeX de forma segura
+const SafeLatex = ({ content }) => {
+  if (!content) return <span>Sin texto</span>;
+  
+  // Limpiar y normalizar la entrada LaTeX
+  const cleanedContent = String(content)
+    .replace(/undefined/g, '')
+    .replace(/\\\\/g, '\\') // Corregir doble escape de backslashes
+    .replace(/\\?\\\(/g, '') // Eliminar \( o \\(
+    .replace(/\\?\\\)/g, ''); // Eliminar \) o \\)
+  
+  // Verificar si necesita ser envuelto en delimitadores
+  const needsWrap = !cleanedContent.trim().startsWith('$') && 
+                   !cleanedContent.trim().startsWith('\\begin');
+                   
+  const processedContent = needsWrap ? `$${cleanedContent}$` : cleanedContent;
+  
+  try {
+    return <Latex>{processedContent}</Latex>;
+  } catch (error) {
+    console.error("Error al renderizar LaTeX:", error);
+    return <span>{content}</span>;
+  }
 };
 
 // Componente principal
@@ -97,7 +124,7 @@ const EvaluationApp = () => {
     for (let level = 1; level <= 4; level++) {
       matrix[level] = {};
       for (let category = 1; category <= 7; category++) {
-        matrix[level][category] = 0.7; // 70% de confianza inicial (neutral)
+        matrix[level][category] = 0.5; // 50% de confianza inicial (neutral)
       }
     }
     return matrix;
@@ -106,7 +133,7 @@ const EvaluationApp = () => {
   // Función para determinar si hay suficiente confianza para avanzar
   const hasSufficientConfidence = (level, category) => {
     const confidence = confidenceMatrix[level]?.[category] || 0;
-    const CONFIDENCE_THRESHOLD = 0.7; // 80% de confianza para avanzar
+    const CONFIDENCE_THRESHOLD = 0.7; // 70% de confianza para avanzar (ajustado desde 80%)
     
     console.log(`Confianza para Nivel ${level}, Categoría ${category}: ${(confidence * 100).toFixed(1)}%`);
     return confidence >= CONFIDENCE_THRESHOLD;
@@ -655,20 +682,20 @@ const EvaluationApp = () => {
           // Solo avanzar si hay suficiente confianza estadística
           console.log(`Confianza suficiente para avanzar desde Nivel ${currentLevel}, Categoría ${currentCategoryNumber}`);
           
-          // Avanzar a siguiente categoría
-          if (currentCategoryNumber < 7) {
-            // Avanzar a la siguiente categoría del mismo nivel
-            updates.currentCategoryNumber = currentCategoryNumber + 1;
-            console.log(`Avanzando a categoría ${currentCategoryNumber + 1} del nivel ${currentLevel}`);
+          // LÓGICA MODIFICADA: Avanzar verticalmente por niveles (en lugar de horizontalmente por categorías)
+          if (currentLevel < 4) {
+            // Avanzar al siguiente nivel de la misma categoría
+            updates.currentLevel = currentLevel + 1;
+            console.log(`Avanzando a nivel ${currentLevel + 1}, manteniendo categoría ${currentCategoryNumber}`);
           } else {
-            // Si estamos en la última categoría, avanzar al siguiente nivel
-            if (currentLevel < 4) {
-              updates.currentLevel = currentLevel + 1;
-              updates.currentCategoryNumber = 1;
-              console.log(`Avanzando a nivel ${currentLevel + 1}, categoría 1`);
+            // Si estamos en el nivel más alto (4), avanzar a la siguiente categoría nivel 1
+            if (currentCategoryNumber < 7) {
+              updates.currentLevel = 1; 
+              updates.currentCategoryNumber = currentCategoryNumber + 1;
+              console.log(`Completados todos los niveles de categoría ${currentCategoryNumber}. Avanzando a categoría ${currentCategoryNumber + 1}, nivel 1`);
             } else {
-              // Si ya estamos en el último nivel, seguimos en la última categoría
-              console.log(`Permaneciendo en nivel ${currentLevel}, categoría ${currentCategoryNumber}`);
+              // Si ya estamos en la última categoría y último nivel, permanecemos ahí
+              console.log(`Permaneciendo en nivel ${currentLevel}, categoría ${currentCategoryNumber} (máximo alcanzado)`);
             }
           }
         } else {
@@ -680,13 +707,19 @@ const EvaluationApp = () => {
         // Incrementar contador de intentos fallidos
         updates.failedAttempts = failedAttempts + 1;
         
-        // Si no es nivel 1, retroceder un nivel
+        // LÓGICA MODIFICADA: Retroceder un nivel dentro de la misma categoría
         if (currentLevel > 1) {
+          // Si no está en nivel 1, retrocede un nivel en la misma categoría
           updates.currentLevel = currentLevel - 1;
-          console.log(`Retrocediendo a nivel ${currentLevel - 1}, categoría ${currentCategoryNumber}`);
+          console.log(`Retrocediendo a nivel ${currentLevel - 1}, manteniendo categoría ${currentCategoryNumber}`);
+        } else if (currentCategoryNumber > 1) {
+          // Si está en nivel 1 de una categoría > 1, retrocede a nivel 4 de la categoría anterior
+          updates.currentLevel = 4;
+          updates.currentCategoryNumber = currentCategoryNumber - 1;
+          console.log(`Retrocediendo a categoría ${currentCategoryNumber - 1}, nivel 4`);
         } else {
-          // Si ya estamos en nivel 1, permanecer en nivel 1
-          console.log(`Permaneciendo en nivel ${currentLevel}, categoría ${currentCategoryNumber}`);
+          // Si ya estamos en categoría 1, nivel 1, permanecemos ahí
+          console.log(`Permaneciendo en nivel ${currentLevel}, categoría ${currentCategoryNumber} (mínimo alcanzado)`);
         }
       }
       
@@ -1213,7 +1246,7 @@ const EvaluationApp = () => {
               <div className="p-4 bg-gray-50 rounded-lg">
                 {currentQuestion && currentQuestion.text ? (
                   <div className="question-text">
-                    <Latex>{String(currentQuestion.text).replace(/undefined/g, '')}</Latex>
+                    <SafeLatex content={String(currentQuestion.text)} />
                   </div>
                 ) : (
                   <p>No hay texto de pregunta disponible</p>
@@ -1251,7 +1284,7 @@ const EvaluationApp = () => {
                         </div>
                         <div>
                           {option && option.text ? (
-                            <Latex>{String(option.text).replace(/undefined/g, '')}</Latex>
+                            <SafeLatex content={option.text} />
                           ) : (
                             <span>Sin texto</span>
                           )}
