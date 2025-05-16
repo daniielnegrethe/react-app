@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/react-app/static/css/main.88c55ae2.css",
-    "main.js": "/react-app/static/js/main.dc9d48a5.js",
+    "main.js": "/react-app/static/js/main.f098625d.js",
     "static/js/952.22a125cb.chunk.js": "/react-app/static/js/952.22a125cb.chunk.js",
     "static/media/KaTeX_AMS-Regular.ttf": "/react-app/static/media/KaTeX_AMS-Regular.853be92419a6c3766b9a.ttf",
     "static/media/KaTeX_Main-Regular.ttf": "/react-app/static/media/KaTeX_Main-Regular.9eba1d77abcf2aa6e94e.ttf",
@@ -65,11 +65,11 @@
     "static/media/KaTeX_Size3-Regular.woff2": "/react-app/static/media/KaTeX_Size3-Regular.e1951519f6f0596f7356.woff2",
     "index.html": "/react-app/index.html",
     "main.88c55ae2.css.map": "/react-app/static/css/main.88c55ae2.css.map",
-    "main.dc9d48a5.js.map": "/react-app/static/js/main.dc9d48a5.js.map",
+    "main.f098625d.js.map": "/react-app/static/js/main.f098625d.js.map",
     "952.22a125cb.chunk.js.map": "/react-app/static/js/952.22a125cb.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.88c55ae2.css",
-    "static/js/main.dc9d48a5.js"
+    "static/js/main.f098625d.js"
   ]
 }
